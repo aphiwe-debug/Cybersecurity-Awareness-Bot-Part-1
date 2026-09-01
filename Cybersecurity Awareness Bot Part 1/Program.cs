@@ -66,3 +66,55 @@ namespace CybersecurityChatbot
         }
     }
 
+    // SERVICE: AsciiArtService — logo displayed on launch
+
+    public static class AsciiArtService
+    {
+        private const string Logo = @"
+   _____ __     __              _____                    _ __       
+  / ____|  |   |  |            / ____|                  (_)  |      
+ | |    | |   | |__   ___ _ __| (___   ___  ___ _   _ _ __ _| |_ _   _
+ | |    | |   | '_ \ / _ \ '__|\___ \ / _ \/ __| | | | '__| | __| | | |
+ | |____| |___| |_) |  __/ |   ____) |  __/ (__| |_| | |  | | |_| |_| |
+  \_____|______|_.__/ \___|_|  |_____/ \___|\___|\__,_|_|  |_|\__|\__, |
+                                                                    __/ |
+              A W A R E N E S S   B O T                          |___/ 
+";
+
+        public static void Display()
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine(Logo);
+            Console.ResetColor();
+        }
+    }
+
+
+    // SERVICE: AudioService — plays the WAV voice greeting
+    public static class AudioService
+    {
+        public static void PlayGreeting(string relativePath)
+        {
+            try
+            {
+                string fullPath = Path.Combine(AppContext.BaseDirectory, relativePath);
+
+                if (!File.Exists(fullPath))
+                {
+                    ConsoleUI.PrintError($"Voice greeting not found at '{relativePath}'. Continuing without audio.");
+                    return;
+                }
+
+                using SoundPlayer player = new SoundPlayer(fullPath);
+                player.PlaySync(); // waits for playback to finish before continuing
+            }
+            catch (PlatformNotSupportedException)
+            {
+                ConsoleUI.PrintError("Voice greeting playback is only supported on Windows. Continuing without audio.");
+            }
+            catch (Exception ex)
+            {
+                ConsoleUI.PrintError($"Could not play voice greeting: {ex.Message}");
+            }
+        }
+    }
