@@ -169,3 +169,72 @@ namespace CybersecurityChatbot
         private static bool Contains(string haystack, string needle) => haystack.Contains(needle, StringComparison.OrdinalIgnoreCase);
     }
 
+    // PROGRAM: entry point
+
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+            // 1. Voice greeting
+            AudioService.PlayGreeting(Path.Combine("welcome.wav.wav"));
+
+            // 2. ASCII art
+            AsciiArtService.Display();
+
+            // 3. Text-based welcome message
+            ConsoleUI.PrintHeader("CYBERSECURITY AWARENESS BOT");
+            ConsoleUI.PrintBotMessage("Hello! Welcome to the Cybersecurity Awareness Bot. I'm here to help you stay safe online.");
+
+            User user = new User();
+            while (string.IsNullOrWhiteSpace(user.Name))
+            {
+                ConsoleUI.PrintBotMessage("Before we start, what's your name?");
+                string nameInput = ConsoleUI.PromptUser();
+
+                if (string.IsNullOrWhiteSpace(nameInput))
+                {
+                    ConsoleUI.PrintError("I didn't catch that. Please type your name.");
+                    continue;
+                }
+
+                user.Name = nameInput.Trim();
+            }
+
+            ConsoleUI.PrintDivider('-');
+            ConsoleUI.PrintBotMessage($"Great to meet you, {user.Name}! Let's talk about staying safe online.");
+            ConsoleUI.PrintBotMessage("You can ask me about passwords, phishing, or safe browsing. Type 'exit' at any time to quit.");
+            ConsoleUI.PrintDivider('-');
+
+            // 4-5. Main conversation loop
+            ResponseService responder = new ResponseService(user);
+            bool running = true;
+
+            while (running)
+            {
+                string input = ConsoleUI.PromptUser(user.Name);
+
+                if (responder.IsInvalid(input))
+                {
+                    ConsoleUI.PrintError("I didn't quite understand that. Could you rephrase?");
+                    continue;
+                }
+
+                string trimmed = input.Trim().ToLowerInvariant();
+                if (trimmed is "exit" or "quit" or "bye")
+                {
+                    ConsoleUI.PrintBotMessage($"Goodbye, {user.Name}! Stay safe online.");
+                    running = false;
+                    continue;
+                }
+
+                string response = responder.GetResponse(input);
+                ConsoleUI.PrintBotMessage(response);
+            }
+
+            ConsoleUI.PrintDivider();
+        }
+    }
+}
+
