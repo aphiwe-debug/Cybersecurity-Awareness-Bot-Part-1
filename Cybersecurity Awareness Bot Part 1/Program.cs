@@ -178,7 +178,7 @@ _________        ___.                                                  .__  __
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
             // 1. Voice greeting
-            AudioService.PlayGreeting(Path.Combine("welcome.wav.wav"));
+            AudioService.PlayGreeting(Path.Combine("welcome.wav"));
 
             // 2. ASCII art
             AsciiArtService.Display();
