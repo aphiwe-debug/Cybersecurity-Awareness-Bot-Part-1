@@ -42,12 +42,12 @@ namespace CybersecurityChatbot
             PrintDivider();
         }
 
-        public static void PrintBotMessage(string message)
+        public static void PrintBotMessage(string message, int delayMs = 8)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("Bot: ");
             Console.ResetColor();
-            TypeLine(message, ConsoleColor.White, 8);
+            TypeLine(message, ConsoleColor.White, delayMs);
         }
 
         public static void PrintError(string message)
@@ -105,8 +105,8 @@ _________        ___.                                                  .__  __
                     return;
                 }
 
-                using SoundPlayer player = new SoundPlayer(fullPath);
-                player.PlaySync(); // waits for playback to finish before continuing
+                SoundPlayer player = new SoundPlayer(fullPath);
+                player.Play(); // non-blocking — audio plays in the background while console output continues
             }
             catch (PlatformNotSupportedException)
             {
@@ -177,15 +177,18 @@ _________        ___.                                                  .__  __
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            // 1. Voice greeting
-            AudioService.PlayGreeting(Path.Combine("welcome.wav"));
-
-            // 2. ASCII art
+            // 1. ASCII art — shown immediately, before anything blocking happens
             AsciiArtService.Display();
 
-            // 3. Text-based welcome message
+            // 2. Text-based header
             ConsoleUI.PrintHeader("CYBERSECURITY AWARENESS BOT");
-            ConsoleUI.PrintBotMessage("Hello! Welcome to the Cybersecurity Awareness Bot. I'm here to help you stay safe online.");
+
+            // 3. Voice greeting — starts playing in the background (non-blocking)
+            AudioService.PlayGreeting(Path.Combine("welcome.wav"));
+
+            // 4. Text-based welcome message — types out WHILE the audio plays
+            // delay of 60ms roughly paces the text to a ~4-second voice clip; tune to match your actual WAV length
+            ConsoleUI.PrintBotMessage("Hello! Welcome to the Cybersecurity Awareness Bot. I'm here to help you stay safe online.", 60);
 
             User user = new User();
             while (string.IsNullOrWhiteSpace(user.Name))
@@ -207,7 +210,7 @@ _________        ___.                                                  .__  __
             ConsoleUI.PrintBotMessage("You can ask me about passwords, phishing, or safe browsing. Type 'exit' at any time to quit.");
             ConsoleUI.PrintDivider('-');
 
-            // 4-5. Main conversation loop
+            // 5. Main conversation loop
             ResponseService responder = new ResponseService(user);
             bool running = true;
 
