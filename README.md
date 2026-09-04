@@ -1,6 +1,10 @@
 # Cybersecurity Awareness Bot
 
-A C# console chatbot that educates users on basic cybersecurity practices — passwords, phishing, safe browsing, and malware — through a simple, styled command-line conversation.
+A C# console chatbot that educates users on basic cybersecurity practices — passwords, phishing, safe browsing, and malware — through a simple, styled command-line conversation.  
+
+# video walkthrough
+
+https://1drv.ms/v/c/6b4b4f53ee999311/IQCwnD-H7RCzTKvrKsIX8U6bAY0j0-r8dKYZ_PqaGligIiE?e=8qzyf3
 
 ## Features
 
