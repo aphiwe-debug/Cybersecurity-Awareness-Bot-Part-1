@@ -29,6 +29,11 @@ Each class lives in its own file (not all crammed into `Program.cs`):
 | `AudioService.cs` | Plays the welcome `.wav` file, with graceful fallback if missing/unsupported |
 | `ResponseService.cs` | Core chatbot logic — validates input and maps keywords to responses |
 
+## Actions success
+<img width="791" height="141" alt="Screenshot 2026-09-08 144038" src="https://github.com/user-attachments/assets/2b3bf077-8eab-430e-8df9-43bd2e8574d0" />
+
+
+
 ## Requirements
 
 - **.NET SDK** (6.0 or later recommended)
