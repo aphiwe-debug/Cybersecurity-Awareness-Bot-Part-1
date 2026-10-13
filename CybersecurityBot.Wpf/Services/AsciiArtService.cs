@@ -10,7 +10,7 @@ namespace Cybersecurity_Awareness_Bot_Part_1
 
     public static class AsciiArtService
     {
-        private const string Logo = @"
+        public const string Logo = @"
 _________        ___.                                                  .__  __          
 \_   ___ \___.__.\_ |__   ___________  ______ ____   ____  __ _________|__|/  |_ ___.__.
 /    \  \<   |  | | __ \_/ __ \_  __ \/  ___// __ \_/ ___\|  |  \_  __ \  \   __<   |  |
@@ -21,12 +21,7 @@ _________        ___.                                                  .__  __
               A W A R E N E S S   B O T                          
 ";
 
-        public static void Display()
-        {
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine(Logo);
-            Console.ResetColor();
-        }
+       
     }
 
 }

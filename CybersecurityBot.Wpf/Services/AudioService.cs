@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Media;
+﻿using System.Media;
 
 namespace CybersecurityBot.Wpf.Services;
 

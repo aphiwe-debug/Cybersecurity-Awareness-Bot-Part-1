@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using CybersecurityBot.Wpf.Models;
+using CybersecurityBot.Wpf.Services;
 
 namespace CybersecurityBot.Wpf;
 
@@ -22,6 +23,12 @@ public partial class MainWindow : Window
     private async Task StartAsync()
     {
         SetInputEnabled(false);
+        LogoText.Text = AsciiArtService.Logo.Trim('\r', '\n');
+
+        string? audioError = AudioService.PlayGreeting("welcome.wav");
+        if (audioError != null)
+            AddBubble("System", "⚠ " + audioError, "#5A1D1D", HorizontalAlignment.Center);
+
         await BotSayAsync("Hello! Welcome to the Cybersecurity Awareness Bot. I'm here to help you stay safe online.", 30);
         await BotSayAsync("Before we start, what's your name?");
         SetInputEnabled(true);
