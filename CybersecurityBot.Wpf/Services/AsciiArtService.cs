@@ -4,13 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cybersecurity_Awareness_Bot_Part_1
-{
-    // SERVICE: AsciiArtService — logo displayed on launch
+namespace CybersecurityBot.Wpf.Services;
 
-    public static class AsciiArtService
-    {
-        public const string Logo = @"
+public static class AsciiArtService
+{
+    /// <summary>
+    /// ASCII art logo used by the application's UI.
+    /// The caller trims any leading/trailing newlines as needed.
+    /// </summary>
+    public static string Logo =>
+         @"
 _________        ___.                                                  .__  __          
 \_   ___ \___.__.\_ |__   ___________  ______ ____   ____  __ _________|__|/  |_ ___.__.
 /    \  \<   |  | | __ \_/ __ \_  __ \/  ___// __ \_/ ___\|  |  \_  __ \  \   __<   |  |
@@ -20,9 +23,6 @@ _________        ___.                                                  .__  __
  
               A W A R E N E S S   B O T                          
 ";
-
-       
-    }
-
 }
+
 

@@ -18,6 +18,8 @@ public class ResponseEngine
         { "tell me more", "explain", "more detail", "more info", "elaborate", "what do you mean",
           "i don't understand", "i dont understand", "confused" };
 
+    private static readonly Regex InterestPattern = new(@"(?:i['’]?m interested in|i like|i love|my favorite topic is|my favourite topic is|i want to learn about|i want to know about|i care about|i'm curious about|i am interested in|i'm into|i am into)\s+(?<subject>.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
     private readonly User _user;
     private readonly Random _random = new();
     private readonly Dictionary<string, string> _lastTip = new();
