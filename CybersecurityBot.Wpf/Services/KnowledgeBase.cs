@@ -90,4 +90,30 @@ public static class KnowledgeBase
         ["malware"] = "Malware is software built to harm or spy: viruses, spyware, ransomware. It usually arrives through attachments, fake downloads or infected USB drives, so updates, official sources and backups are your main defence.",
         ["browsing"] = "Unsafe sites can steal logins or push malware. Check the address bar for lookalike domains, prefer https://, and avoid entering personal details on pages you reached through a message or pop-up."
     };
+    public static readonly Dictionary<string, string[]> SentimentWords = new()
+    {
+        ["worried"] = new[] { "worried", "scared", "afraid", "anxious", "nervous", "concerned" },
+        ["frustrated"] = new[] { "frustrated", "annoyed", "angry", "fed up", "hate" },
+        ["overwhelmed"] = new[] { "overwhelmed", "too much", "lost" },
+        ["curious"] = new[] { "curious", "wondering", "want to learn" }
+    };
+
+    public static readonly Dictionary<string, string> SentimentReplies = new()
+    {
+        ["worried"] = "It's completely understandable to feel that way. Cyber threats can be very convincing, but a few habits go a long way. Here's a tip:",
+        ["frustrated"] = "I hear you, security can feel like a hassle sometimes. Let's keep it simple. Here's one quick tip:",
+        ["overwhelmed"] = "No need to feel overwhelmed. We'll take it one small step at a time. Start with this:",
+        ["curious"] = "Great that you're curious, asking questions is the best defence. Here's something to know:"
+    };
+
+    // completes "As someone interested in X, you might want to ..."
+    public static readonly Dictionary<string, string> PersonalNotes = new()
+    {
+        ["password"] = "review which of your accounts still share a password and change those first.",
+        ["phishing"] = "pause before clicking links in any message that creates a sense of urgency.",
+        ["scam"] = "double-check any unexpected request for money or a one-time PIN before you act.",
+        ["privacy"] = "review the security settings on your accounts.",
+        ["malware"] = "check that your device updates and antivirus are switched on.",
+        ["browsing"] = "make it a habit to check the address bar before entering login details."
+    };
 }

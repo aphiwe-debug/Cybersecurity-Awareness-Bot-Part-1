@@ -1,4 +1,5 @@
 ﻿using CybersecurityBot.Wpf.Models;
+using System.Text.RegularExpressions;
 
 namespace CybersecurityBot.Wpf.Services;
 
@@ -22,15 +23,18 @@ public class ResponseEngine
     private readonly Dictionary<string, string> _lastTip = new();
     private readonly List<ResponseHandler> _handlers;
 
+
     public ResponseEngine(User user)
     {
         _user = user;
         // Pipeline of delegates: the first handler that returns a reply wins
         _handlers = new List<ResponseHandler>
         {
-            HandleFollowUp,
-            HandleTopic,
-            HandleSmallTalk
+          HandleRecall,
+          HandleInterest,
+          HandleFollowUp,
+          HandleTopicOrSentiment,   
+          HandleSmallTalk
         };
     }
 
@@ -70,13 +74,62 @@ public class ResponseEngine
         return wantsTip ? NextTip(_user.LastTopic) : KnowledgeBase.Details[_user.LastTopic];
     }
 
-    private string? HandleTopic(string text)
+    private string? HandleRecall(string text)
     {
-        string? topic = FindTopic(text);
+        bool asksWhatIKnow = text.Contains("what do you remember") || text.Contains("what's my name")
+                          || text.Contains("what is my name") || text.Contains("do you remember me");
+        if (!asksWhatIKnow) return null;
+
+        string favourite = string.IsNullOrEmpty(_user.FavouriteTopic)
+            ? "You haven't told me a favourite topic yet."
+            : $"You're interested in {_user.FavouriteTopic}.";
+        return $"Your name is {_user.Name}. {favourite} You've asked me {Math.Max(0, _user.QuestionsAsked - 1)} question(s) so far.";
+    }
+
+    private string? HandleInterest(string text)
+    {
+        Match match = InterestPattern.Match(text);
+        if (!match.Success) return null;
+
+        string? topic = FindTopic(match.Groups["subject"].Value);
         if (topic == null) return null;
 
-        _user.LastTopic = topic;   // remembered so follow-ups continue this topic
-        return NextTip(topic);
+        _user.FavouriteTopic = topic;   // memory: used later by PersonalTouch
+        _user.LastTopic = topic;
+        return $"Great! I'll remember that you're interested in {topic}. It's a crucial part of staying safe online. {NextTip(topic)}";
+    }
+
+    private string? HandleTopicOrSentiment(string text)
+    {
+        string? topic = FindTopic(text);
+        string? sentiment = FindSentiment(text);
+        if (topic == null && sentiment == null) return null;
+
+        // Feeling but no topic: continue the last topic (or pick one) so the user gets a tip straight away
+        topic ??= string.IsNullOrEmpty(_user.LastTopic) ? RandomTopic() : _user.LastTopic;
+        _user.LastTopic = topic;
+
+        string opener = sentiment != null ? KnowledgeBase.SentimentReplies[sentiment] + " " : string.Empty;
+        return opener + NextTip(topic) + PersonalTouch(topic);
+    }
+
+    private string? FindSentiment(string text)
+    {
+        foreach (var pair in KnowledgeBase.SentimentWords)
+            if (pair.Value.Any(word => text.Contains(word))) return pair.Key;
+        return null;
+    }
+
+    private string RandomTopic()
+    {
+        List<string> topics = KnowledgeBase.Tips.Keys.ToList();
+        return topics[_random.Next(topics.Count)];
+    }
+
+    private string PersonalTouch(string topic)
+    {
+        if (!string.Equals(_user.FavouriteTopic, topic, StringComparison.OrdinalIgnoreCase)) return string.Empty;
+        return $" As someone interested in {topic}, you might want to {KnowledgeBase.PersonalNotes[topic]}";
     }
 
     private string? HandleSmallTalk(string text)
