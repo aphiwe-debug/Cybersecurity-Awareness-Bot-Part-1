@@ -8,10 +8,7 @@ namespace CybersecurityBot.Wpf.Services;
 
 public static class AsciiArtService
 {
-    /// <summary>
-    /// ASCII art logo used by the application's UI.
-    /// The caller trims any leading/trailing newlines as needed.
-    /// </summary>
+    
     public static string Logo =>
          @"
 _________        ___.                                                  .__  __          
