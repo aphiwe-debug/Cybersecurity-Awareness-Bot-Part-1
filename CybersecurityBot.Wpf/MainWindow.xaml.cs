@@ -13,6 +13,7 @@ public partial class MainWindow : Window
     private readonly User _user = new();
     private bool _awaitingName = true;
     private bool _botBusy;
+    private ResponseEngine? _engine;
 
     public MainWindow()
     {
@@ -90,11 +91,12 @@ public partial class MainWindow : Window
 
         _user.Name = name;
         _awaitingName = false;
+        _engine = new ResponseEngine(_user);
         await BotSayAsync($"Great to meet you, {name}! Let's talk about staying safe online.");
         await BotSayAsync("You can ask me about passwords, phishing, scams, privacy or safe browsing. Type 'exit' to quit.");
     }
 
-    private string GetReply(string input) => "You can ask me about passwords, phishing, or safe browsing."; // replaced in Step 6
+    private string GetReply(string input) => _engine!.GetResponse(input);
 
     // ---------- UI helpers ----------
     private async Task BotSayAsync(string text, int delayMs = 12)
