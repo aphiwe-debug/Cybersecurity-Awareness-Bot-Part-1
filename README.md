@@ -2,6 +2,9 @@
 
 A C# console chatbot that educates users on basic cybersecurity practices — passwords, phishing, safe browsing, and malware — through a simple, styled command-line conversation.
 
+## videowalkthrough
+https://1drv.ms/v/c/6b4b4f53ee999311/IQDQ74JwU_7BRpRe4YeI5j9zAVtSl4irff_SGPUOU_KfDg4?e=jTYktz
+
 ## Features
 
 - **Voice greeting** — plays a `.wav` welcome sound on launch (Windows only, via `System.Media.SoundPlayer`)
@@ -11,6 +14,9 @@ A C# console chatbot that educates users on basic cybersecurity practices — pa
 - **Keyword-based Q&A engine** — recognizes topics like passwords, phishing, safe browsing, and malware, and responds with relevant tips
 - **Input validation** — handles empty/whitespace input and unrecognized questions gracefully
 - **Exit commands** — type `exit`, `quit`, or `bye` at any time to end the session
+
+  ##Actions
+  <img width="752" height="162" alt="image" src="https://github.com/user-attachments/assets/d0b64ff5-2ad2-4987-aceb-c74297e5d6d6" />
 
 ## Project Structure
 
