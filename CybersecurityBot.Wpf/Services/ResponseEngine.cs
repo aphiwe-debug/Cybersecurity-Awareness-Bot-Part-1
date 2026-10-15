@@ -1,5 +1,5 @@
-﻿using CybersecurityBot.Wpf.Models;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using CybersecurityBot.Wpf.Models;
 
 namespace CybersecurityBot.Wpf.Services;
 
@@ -8,23 +8,23 @@ public delegate string? ResponseHandler(string text);
 
 public class ResponseEngine
 {
-    private const string Fallback =
-        "I'm not sure I understand. Can you try rephrasing? You can ask me about passwords, phishing, scams, privacy, malware or safe browsing.";
-
     private static readonly string[] MoreTipPhrases =
-        { "another tip", "give me another", "one more", "next tip", "another one" };
+        { "another tip", "give me another", "one more", "next tip", "another one", "something else" };
 
     private static readonly string[] ExplainPhrases =
         { "tell me more", "explain", "more detail", "more info", "elaborate", "what do you mean",
-          "i don't understand", "i dont understand", "confused" };
+          "i don't understand", "i dont understand", "confused", "go deeper" };
 
-    private static readonly Regex InterestPattern = new(@"(?:i['’]?m interested in|i like|i love|my favorite topic is|my favourite topic is|i want to learn about|i want to know about|i care about|i'm curious about|i am interested in|i'm into|i am into)\s+(?<subject>.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private static readonly string[] ExamplePhrases = { "example", "for instance", "real life", "real-life" };
+
+    // only count as "explain this topic" when a topic is also named, e.g. "what is phishing"
+    private static readonly string[] DefinePhrases = { "what is", "what are", "what's", "how does", "how do" };
 
     private readonly User _user;
     private readonly Random _random = new();
     private readonly Dictionary<string, string> _lastTip = new();
+    private readonly Dictionary<string, int> _depth = new();   // topic -> how far the "tell me more" ladder has gone
     private readonly List<ResponseHandler> _handlers;
-
 
     public ResponseEngine(User user)
     {
@@ -32,11 +32,9 @@ public class ResponseEngine
         // Pipeline of delegates: the first handler that returns a reply wins
         _handlers = new List<ResponseHandler>
         {
-          HandleRecall,
-          HandleInterest,
-          HandleFollowUp,
-          HandleTopicOrSentiment,   
-          HandleSmallTalk
+            HandleFollowUp,
+            HandleTopic,
+            HandleSmallTalk
         };
     }
 
@@ -58,92 +56,54 @@ public class ResponseEngine
             return "Oops, something went wrong on my side. Please try asking again.";
         }
 
-        return Fallback;
+        return $"{Pick(KnowledgeBase.Fallbacks)} Try asking about {string.Join(", ", RandomTopics(3))}.";
     }
 
     // ---------- Handlers ----------
     private string? HandleFollowUp(string text)
     {
-        if (FindTopic(text) != null) return null;   // a new topic was named, so let the topic handler answer
+        string? named = FindTopic(text);
 
         bool wantsTip = MoreTipPhrases.Any(p => text.Contains(p));
-        bool wantsDetail = ExplainPhrases.Any(p => text.Contains(p));
-        if (!wantsTip && !wantsDetail) return null;
+        bool wantsExample = ExamplePhrases.Any(p => text.Contains(p));
+        bool wantsDetail = ExplainPhrases.Any(p => text.Contains(p))
+                           || (named != null && DefinePhrases.Any(p => text.Contains(p)));
 
-        if (string.IsNullOrEmpty(_user.LastTopic))
-            return "We haven't picked a topic yet. Ask me about passwords, phishing, scams, privacy, malware or safe browsing and I'll go from there.";
+        if (!wantsTip && !wantsExample && !wantsDetail) return null;
 
-        return wantsTip ? NextTip(_user.LastTopic) : KnowledgeBase.Details[_user.LastTopic];
-    }
+        string? topic = named ?? _user.LastTopic;
+        if (string.IsNullOrEmpty(topic))
+            return $"We haven't picked a topic yet. Try asking about {string.Join(", ", RandomTopics(3))}.";
 
-    private string? HandleRecall(string text)
-    {
-        bool asksWhatIKnow = text.Contains("what do you remember") || text.Contains("what's my name")
-                          || text.Contains("what is my name") || text.Contains("do you remember me");
-        if (!asksWhatIKnow) return null;
-
-        string favourite = string.IsNullOrEmpty(_user.FavouriteTopic)
-            ? "You haven't told me a favourite topic yet."
-            : $"You're interested in {_user.FavouriteTopic}.";
-        return $"Your name is {_user.Name}. {favourite} You've asked me {Math.Max(0, _user.QuestionsAsked - 1)} question(s) so far.";
-    }
-
-    private string? HandleInterest(string text)
-    {
-        Match match = InterestPattern.Match(text);
-        if (!match.Success) return null;
-
-        string? topic = FindTopic(match.Groups["subject"].Value);
-        if (topic == null) return null;
-
-        _user.FavouriteTopic = topic;   // memory: used later by PersonalTouch
         _user.LastTopic = topic;
-        return $"Great! I'll remember that you're interested in {topic}. It's a crucial part of staying safe online. {NextTip(topic)}";
+
+        if (wantsExample)
+        {
+            _depth[topic] = Math.Max(_depth.GetValueOrDefault(topic), 2);
+            return KnowledgeBase.Examples[topic];
+        }
+
+        if (wantsDetail) return Deepen(topic);
+        return TipReply(topic);
     }
 
-    private string? HandleTopicOrSentiment(string text)
+    private string? HandleTopic(string text)
     {
         string? topic = FindTopic(text);
-        string? sentiment = FindSentiment(text);
-        if (topic == null && sentiment == null) return null;
+        if (topic == null) return null;
 
-        // Feeling but no topic: continue the last topic (or pick one) so the user gets a tip straight away
-        topic ??= string.IsNullOrEmpty(_user.LastTopic) ? RandomTopic() : _user.LastTopic;
-        _user.LastTopic = topic;
-
-        string opener = sentiment != null ? KnowledgeBase.SentimentReplies[sentiment] + " " : string.Empty;
-        return opener + NextTip(topic) + PersonalTouch(topic);
-    }
-
-    private string? FindSentiment(string text)
-    {
-        foreach (var pair in KnowledgeBase.SentimentWords)
-            if (pair.Value.Any(word => text.Contains(word))) return pair.Key;
-        return null;
-    }
-
-    private string RandomTopic()
-    {
-        List<string> topics = KnowledgeBase.Tips.Keys.ToList();
-        return topics[_random.Next(topics.Count)];
-    }
-
-    private string PersonalTouch(string topic)
-    {
-        if (!string.Equals(_user.FavouriteTopic, topic, StringComparison.OrdinalIgnoreCase)) return string.Empty;
-        return $" As someone interested in {topic}, you might want to {KnowledgeBase.PersonalNotes[topic]}";
+        _user.LastTopic = topic;   // remembered so follow-ups continue this topic
+        _depth[topic] = 0;         // a fresh question restarts the "tell me more" ladder
+        return TipReply(topic);
     }
 
     private string? HandleSmallTalk(string text)
     {
-        if (text.Contains("how are you"))
-            return "I'm running smoothly and ready to help you stay cyber-safe today!";
-        if (text.Contains("purpose") || text.Contains("what do you do"))
-            return "My purpose is to educate South African citizens about cyber threats like phishing, scams and malware so you can protect yourself online.";
-        if (text.Contains("what can i ask") || text.Contains("help") || text.Contains("topics"))
-            return "You can ask me about: password safety, phishing, scams, privacy, malware and safe browsing.";
-        if (text.Contains("your name"))
-            return "I'm the Cybersecurity Awareness Bot. You can just call me Bot!";
+        foreach (var (pattern, replies) in KnowledgeBase.SmallTalk)
+        {
+            if (Regex.IsMatch(text, pattern, RegexOptions.IgnoreCase))
+                return Pick(replies).Replace("{name}", _user.Name);
+        }
         return null;
     }
 
@@ -154,6 +114,9 @@ public class ResponseEngine
             if (text.Contains(pair.Key)) return pair.Value;
         return null;
     }
+
+    /// <summary>Tip wrapped in a randomly chosen intro so replies don't all sound the same.</summary>
+    private string TipReply(string topic) => $"{Pick(KnowledgeBase.TipIntros)} {NextTip(topic)}";
 
     /// <summary>Random tip for the topic, never the same one twice in a row.</summary>
     private string NextTip(string topic)
@@ -169,4 +132,26 @@ public class ResponseEngine
         _lastTip[topic] = tip;
         return tip;
     }
+
+    /// <summary>Depth ladder: explanation, then real-world example, then a nudge to a new topic.</summary>
+    private string Deepen(string topic)
+    {
+        int level = _depth.GetValueOrDefault(topic);
+        _depth[topic] = level + 1;
+
+        return level switch
+        {
+            0 => KnowledgeBase.Details[topic],
+            1 => KnowledgeBase.Examples[topic],
+            _ => $"That's everything I have on {topic} for now. Ask for another tip, or try a different topic such as {RandomOtherTopic(topic)}."
+        };
+    }
+
+    private string Pick(IReadOnlyList<string> items) => items[_random.Next(items.Count)];
+
+    private List<string> RandomTopics(int count) =>
+        KnowledgeBase.Tips.Keys.OrderBy(_ => _random.Next()).Take(count).ToList();
+
+    private string RandomOtherTopic(string current) =>
+        KnowledgeBase.Tips.Keys.Where(t => t != current).OrderBy(_ => _random.Next()).First();
 }
