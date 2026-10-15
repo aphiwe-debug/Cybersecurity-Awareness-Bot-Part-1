@@ -6,6 +6,9 @@ A C# console chatbot that educates users on basic cybersecurity practices — pa
 
 https://1drv.ms/v/c/6b4b4f53ee999311/IQCwnD-H7RCzTKvrKsIX8U6bAY0j0-r8dKYZ_PqaGligIiE?e=8qzyf3
 
+## videowalkthrough
+https://1drv.ms/v/c/6b4b4f53ee999311/IQDQ74JwU_7BRpRe4YeI5j9zAVtSl4irff_SGPUOU_KfDg4?e=jTYktz
+
 ## Features
 
 - **ASCII art banner** — displays a logo when the app starts
@@ -15,6 +18,11 @@ https://1drv.ms/v/c/6b4b4f53ee999311/IQCwnD-H7RCzTKvrKsIX8U6bAY0j0-r8dKYZ_PqaGli
 - **Keyword-based Q&A engine** — recognizes topics like passwords, phishing, safe browsing, and malware, and responds with relevant tips
 - **Input validation** — handles empty/whitespace input and unrecognized questions gracefully
 - **Exit commands** — type `exit`, `quit`, or `bye` at any time to end the session
+
+  ##Actions
+
+  
+  <img width="752" height="162" alt="image" src="https://github.com/user-attachments/assets/d0b64ff5-2ad2-4987-aceb-c74297e5d6d6" />
 
 ## Project Structure
 
