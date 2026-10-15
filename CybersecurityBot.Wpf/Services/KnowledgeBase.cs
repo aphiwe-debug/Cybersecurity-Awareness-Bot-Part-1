@@ -235,4 +235,37 @@ public static class KnowledgeBase
             "Great! Ask for 'another tip' or 'an example' whenever you're ready."
         })
     };
+
+    // ---------- Sentiment ----------
+    public static readonly Dictionary<string, string[]> SentimentWords = new()
+    {
+        ["worried"] = new[] { "worried", "scared", "afraid", "anxious", "nervous", "concerned" },
+        ["frustrated"] = new[] { "frustrated", "annoyed", "angry", "fed up", "hate" },
+        ["overwhelmed"] = new[] { "overwhelmed", "too much", "lost" },
+        ["curious"] = new[] { "curious", "wondering", "want to learn" }
+    };
+
+    public static readonly Dictionary<string, string> SentimentReplies = new()
+    {
+        ["worried"] = "It's completely understandable to feel that way. Cyber threats can be very convincing, but a few habits go a long way. Here's a tip:",
+        ["frustrated"] = "I hear you, security can feel like a hassle sometimes. Let's keep it simple. Here's one quick tip:",
+        ["overwhelmed"] = "No need to feel overwhelmed. We'll take it one small step at a time. Start with this:",
+        ["curious"] = "Great that you're curious, asking questions is the best defence. Here's something to know:"
+    };
+
+    // completes "As someone interested in X, you might want to ..." (one entry per topic)
+    public static readonly Dictionary<string, string> PersonalNotes = new()
+    {
+        ["password"] = "review which of your accounts still share a password and change those first.",
+        ["phishing"] = "pause before clicking links in any message that creates a sense of urgency.",
+        ["scam"] = "double-check any unexpected request for money or a one-time PIN before you act.",
+        ["privacy"] = "review the security settings on your accounts.",
+        ["malware"] = "check that your device updates and antivirus are switched on.",
+        ["browsing"] = "make it a habit to check the address bar before entering login details.",
+        ["social engineering"] = "agree a family code word and always call back on an official number before acting on an urgent request.",
+        ["wifi"] = "switch off auto-connect to open networks on your phone and laptop.",
+        ["identity"] = "request your free credit report and check it for accounts you don't recognise.",
+        ["banking"] = "turn on transaction notifications in your banking app today.",
+        ["updates"] = "switch on automatic updates and check when your last backup was."
+    };
 }
