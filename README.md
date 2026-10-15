@@ -16,6 +16,8 @@ https://1drv.ms/v/c/6b4b4f53ee999311/IQDQ74JwU_7BRpRe4YeI5j9zAVtSl4irff_SGPUOU_K
 - **Exit commands** — type `exit`, `quit`, or `bye` at any time to end the session
 
   ##Actions
+
+  
   <img width="752" height="162" alt="image" src="https://github.com/user-attachments/assets/d0b64ff5-2ad2-4987-aceb-c74297e5d6d6" />
 
 ## Project Structure
