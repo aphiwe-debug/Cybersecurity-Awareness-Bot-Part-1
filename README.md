@@ -65,64 +65,65 @@ Type `exit`, `quit`, or `bye` to end the conversation.
 - Replace keyword matching with a more flexible NLP/intent-matching approach
 - Cross-platform audio support
 
-Part 2: WPF Chatbot
-Requirements
-Windows 10 or 11 (the voice greeting uses System.Media.SoundPlayer, which is Windows only)
-.NET 8 SDK
-Visual Studio 2022 with the .NET desktop development workload
-How to run
-Clone the repository:
-bash
-   git clone <your repository URL>
-Open CybersecurityBot.sln in Visual Studio.
-In Solution Explorer, right-click CybersecurityBot.Wpf and choose Set as Startup Project.
-Press F5 to build and run.
-Make sure your speakers are on. The voice greeting plays when the window opens.
+# Part 2: WPF Chatbot
 
-To run from a terminal instead:
+A WPF desktop chatbot that teaches South African users how to stay safe online. It recognises 11 cybersecurity topics, gives varied answers, remembers the user and responds to how they feel.
 
-bash
-dotnet run --project CybersecurityBot.Wpf
-Features
-Feature	How it works
-GUI	Dark-themed WPF window with the ASCII logo as a header, chat bubbles, an input box and a Send button. Press Enter or click Send.
-Voice greeting and ASCII logo	welcome.wav plays on launch and the Part 1 logo is shown in a monospaced font.
-Typing effect	The bot's replies appear character by character, like the Part 1 console version.
-Keyword recognition	11 topics recognised from many keywords each, for example "phish", "2FA", "SIM swap", "VPN", "POPIA".
-Random responses	Each topic has several tips. One is picked at random, never the same tip twice in a row, with a randomly chosen intro line.
-Conversation flow	Follow-ups such as "another tip", "tell me more", "give me an example" and "I'm confused" continue the current topic without restarting.
-Depth ladder	"tell me more" gives an explanation, asking again gives a real-world example, and a third time suggests a new topic.
-Memory and recall	Remembers your name and favourite topic, then personalises later tips. Ask "what do you remember" to see it.
-Sentiment detection	Detects worried, frustrated, overwhelmed and curious. The bot responds with empathy and gives a tip in the same reply.
-Small talk	Greetings, thanks, jokes, "who made you" and more, with several replies each.
-Error handling	Empty input shows a warning, unknown input gets a fallback that suggests topics, and a global handler stops unexpected errors from crashing the app.
-Topics covered
+## Requirements
+
+- Windows 10 or 11 (the voice greeting uses `System.Media.SoundPlayer`, which is Windows only)
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- Visual Studio 2022 with the **.NET desktop development** workload
+
+## Features
+
+| Feature | How it works |
+|---|---|
+| **GUI** | Dark-themed WPF window with the ASCII logo as a header, chat bubbles, an input box and a Send button. Press Enter or click Send. |
+| **Voice greeting and ASCII logo** | `welcome.wav` plays on launch and the Part 1 logo is shown in a monospaced font. |
+| **Typing effect** | The bot's replies appear character by character, like the Part 1 console version. |
+| **Keyword recognition** | 11 topics recognised from many keywords each, for example "phish", "2FA", "SIM swap", "VPN", "POPIA". |
+| **Random responses** | Each topic has several tips. One is picked at random, never the same tip twice in a row, with a randomly chosen intro line. |
+| **Conversation flow** | Follow-ups such as "another tip", "tell me more", "give me an example" and "I'm confused" continue the current topic without restarting. |
+| **Depth ladder** | "tell me more" gives an explanation, asking again gives a real-world example, and a third time suggests a new topic. |
+| **Memory and recall** | Remembers your name and favourite topic, then personalises later tips. Ask "what do you remember" to see it. |
+| **Sentiment detection** | Detects worried, frustrated, overwhelmed and curious. The bot responds with empathy and gives a tip in the same reply. |
+| **Small talk** | Greetings, thanks, jokes, "who made you" and more, with several replies each. |
+| **Error handling** | Empty input shows a warning, unknown input gets a fallback that suggests topics, and a global handler stops unexpected errors from crashing the app. |
+
+### Topics covered
 
 Passwords, phishing, scams, privacy, malware, safe browsing, social engineering, public Wi-Fi, identity theft, online banking, software updates and backups.
 
-Improvements over Part 1
+### Improvements over Part 1
 
-Part 1 listed some possible improvements. Part 2 delivers these:
+| Part 1 | Part 2 |
+|---|---|
+| 4 topics | 11 topics, each with several tips, an explanation and an example |
+| One fixed reply per question | Random tips and intros, several replies for small talk |
+| Each question handled on its own | Follow-ups continue the current topic |
+| Question count stored but unused | Memory of name, favourite topic and question count, used to personalise replies |
+| Console only | WPF GUI with the voice greeting and ASCII logo carried over |
 
-Part 1 idea	Part 2 result
-Add more topics	4 topics became 11, each with several tips, an explanation and an example
-More flexible matching	Many keywords per topic, regex patterns, follow-ups that remember the current topic
-Track questions asked	Question count is used in the "what do you remember" reply
-Varied conversation	Random tips and intros, multiple replies for small talk, empathetic replies by sentiment
-Try these phrases
-Type this	What to expect
-hello	A greeting using your name
-what is phishing	An explanation of phishing
-tell me more	A real-world example of the current topic
-give me another tip	A different random tip on the same topic
-I'm interested in privacy	The bot remembers privacy as your favourite topic
-give me a privacy tip	A tip, plus a personal note for your favourite topic
-I'm worried about online scams	An empathetic reply and a scam tip in the same message
-someone called pretending to be my bank	Recognised as social engineering
-what do you remember	Your name, favourite topic and question count
-tell me a joke	A random joke
-exit	Goodbye message, then the app closes
-How the code is organised
+## Try these phrases
+
+| Type this | What to expect |
+|---|---|
+| `hello` | A greeting using your name |
+| `what is phishing` | An explanation of phishing |
+| `tell me more` | A real-world example of the current topic |
+| `give me another tip` | A different random tip on the same topic |
+| `I'm interested in privacy` | The bot remembers privacy as your favourite topic |
+| `give me a privacy tip` | A tip, plus a personal note for your favourite topic |
+| `I'm worried about online scams` | An empathetic reply and a scam tip in the same message |
+| `someone called pretending to be my bank` | Recognised as social engineering |
+| `what do you remember` | Your name, favourite topic and question count |
+| `tell me a joke` | A random joke |
+| `exit` | Goodbye message, then the app closes |
+
+## How the code is organised
+
+```
 CybersecurityBot.sln
 ├── Cybersecurity_Awareness_Bot_Part_1/   Part 1 console app (unchanged since v1.0.0)
 ├── CybersecurityBot.Wpf/                 Part 2 WPF app
@@ -139,13 +140,33 @@ CybersecurityBot.sln
 │       └── ResponseEngine.cs             Decides how the bot replies
 ├── docs/                                 Screenshots used in this README
 └── .github/workflows/                    GitHub Actions CI
-Key techniques
-Delegates. ResponseEngine defines delegate string? ResponseHandler(string text) and keeps a List<ResponseHandler> as a pipeline: recall, interest, follow-up, topic or sentiment, then small talk. The first handler that returns a reply wins, so new behaviour is added by writing one method and adding it to the list.
-Generic collections. Dictionary<string, string> maps keywords to topics, Dictionary<string, List<string>> holds the random tips, and List<(string Pattern, string[] Replies)> holds small talk.
-Separation of concerns. The window only handles display and input, ResponseEngine decides what to say, and KnowledgeBase holds the content. Adding a topic means editing data, not logic.
-Regular expressions. Used for small-talk patterns, the "I'm interested in..." memory pattern, and cleaning "my name is..." input.
-Async typing effect. async/await with Task.Delay keeps the window responsive while the bot types.
-Notes and limitations
-Keyword recognition uses simple string matching, so unusual phrasing may reach the fallback reply. Part 3 extends this with broader NLP-style matching.
-Memory lasts for the current session only.
-The voice greeting is skipped, with a warning in the chat, if welcome.wav is missing or the platform doesn't support playback.
+```
+
+### Key techniques
+
+- **Delegates.** `ResponseEngine` defines `delegate string? ResponseHandler(string text)` and keeps a `List<ResponseHandler>` as a pipeline: recall, interest, follow-up, topic or sentiment, then small talk. The first handler that returns a reply wins, so new behaviour is added by writing one method and adding it to the list.
+- **Generic collections.** `Dictionary<string, string>` maps keywords to topics, `Dictionary<string, List<string>>` holds the random tips, and `List<(string Pattern, string[] Replies)>` holds small talk.
+- **Separation of concerns.** The window only handles display and input, `ResponseEngine` decides what to say, and `KnowledgeBase` holds the content. Adding a topic means editing data, not logic.
+- **Regular expressions.** Used for small-talk patterns, the "I'm interested in..." memory pattern, and cleaning "my name is..." input.
+- **Async typing effect.** `async`/`await` with `Task.Delay` keeps the window responsive while the bot types.
+
+## Version control and releases
+
+All Part 2 work is committed on the `part2` branch, with the `Part 2:` prefix on every message, and merged into `master`.
+
+| Release | Tag | Contents |
+|---|---|---|
+| Part 1 | `v1.0.0` | Console chatbot |
+| Part 2 | `v2.0.0` | Complete Part 2 with depth ladder, error handling and CI, GUI, keywords, random tips, memory, sentiment |
+
+```
+
+### Continuous integration
+
+GitHub Actions (`.github/workflows`) restores and builds the solution on `windows-latest` for every push and pull request. WPF builds only on Windows. The screenshot at the top of this README shows a passing run.
+
+## Notes and limitations
+
+- Keyword recognition uses simple string matching, so unusual phrasing may reach the fallback reply. Part 3 extends this with broader NLP-style matching.
+- Memory lasts for the current session only.
+- The voice greeting is skipped, with a warning in the chat, if `welcome.wav` is missing or the platform doesn't support playback.
