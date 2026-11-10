@@ -12,13 +12,17 @@ public partial class MainWindow : Window
 {
     private readonly User _user = new();
     private bool _awaitingName = true;
+    private readonly TaskService _tasks;
     private bool _botBusy;
     private ResponseEngine? _engine;
 
     public DatabaseService Db { get; } = new(DatabaseSettings.Load());
+
     public MainWindow()
     {
         InitializeComponent();
+        _tasks = new TaskService(Db);
+        TasksPage.Initialize(_tasks);
         Loaded += async (_, _) => await StartAsync();
     }
 
@@ -36,6 +40,7 @@ public partial class MainWindow : Window
             dbError == null ? "✔ Connected to the MySQL database." : "⚠ " + dbError,
             dbError == null ? "#1B4332" : "#5A1D1D",
             HorizontalAlignment.Center);
+        if (dbError == null) TasksPage.Refresh();
 
         await BotSayAsync("Hello! Welcome to the Cybersecurity Awareness Bot. I'm here to help you stay safe online.", 30);
         await BotSayAsync("Before we start, what's your name?");
