@@ -15,6 +15,7 @@ public partial class MainWindow : Window
     private bool _botBusy;
     private ResponseEngine? _engine;
 
+    public DatabaseService Db { get; } = new(DatabaseSettings.Load());
     public MainWindow()
     {
         InitializeComponent();
@@ -29,6 +30,12 @@ public partial class MainWindow : Window
         string? audioError = AudioService.PlayGreeting("welcome.wav");
         if (audioError != null)
             AddBubble("System", "⚠ " + audioError, "#5A1D1D", HorizontalAlignment.Center);
+
+        string? dbError = await Task.Run(() => Db.Initialize());
+        AddBubble("System",
+            dbError == null ? "✔ Connected to the MySQL database." : "⚠ " + dbError,
+            dbError == null ? "#1B4332" : "#5A1D1D",
+            HorizontalAlignment.Center);
 
         await BotSayAsync("Hello! Welcome to the Cybersecurity Awareness Bot. I'm here to help you stay safe online.", 30);
         await BotSayAsync("Before we start, what's your name?");

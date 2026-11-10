@@ -13,6 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <None Update="dbsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="welcome.wav">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
