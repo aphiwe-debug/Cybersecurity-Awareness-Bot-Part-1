@@ -17,12 +17,14 @@ public partial class MainWindow : Window
     private ResponseEngine? _engine;
 
     public DatabaseService Db { get; } = new(DatabaseSettings.Load());
+    public ActivityLog Log { get; } = new();
 
     public MainWindow()
     {
         InitializeComponent();
-        _tasks = new TaskService(Db);
+        _tasks = new TaskService(Db, Log.Add);
         TasksPage.Initialize(_tasks);
+        LogPage.Initialize(Log);
         Loaded += async (_, _) => await StartAsync();
     }
 
@@ -104,6 +106,7 @@ public partial class MainWindow : Window
         _user.Name = name;
         _awaitingName = false;
         _engine = new ResponseEngine(_user);
+        Log.Add($"Chat started with {name}");
         await BotSayAsync($"Great to meet you, {name}! Let's talk about staying safe online.");
         await BotSayAsync("You can ask me about passwords, phishing, scams, privacy or safe browsing. Type 'exit' to quit.");
     }
