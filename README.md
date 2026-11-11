@@ -8,9 +8,9 @@ A WPF desktop chatbot that teaches South African users how to stay safe online. 
 | **Student** | Aphiwe Magwaza |
 | **Student number** | `ST10499504` |
 | **Repository** | https://github.com/aphiwe-debug/Cybersecurity-Awareness-Bot-Part-1 |
-| **Part 1 video** | `https://1drv.ms/v/c/6b4b4f53ee999311/IQCwnD-H7RCzTKvrKsIX8U6bAY0j0-r8dKYZ_PqaGligIiE?e=FPktjR` |
-| **Part 2 video** | `part 2 walkthrough.mp4` |
-| **Part 3 / POE video** | `part 3.mp4` |
+| **Part 1 video** | https://1drv.ms/v/c/6b4b4f53ee999311/IQCwnD-H7RCzTKvrKsIX8U6bAY0j0-r8dKYZ_PqaGligIiE?e=FPktjR |
+| **Part 2 video** | https://1drv.ms/v/c/6b4b4f53ee999311/IQDQ74JwU_7BRpRe4YeI5j9zAVtSl4irff_SGPUOU_KfDg4?e=FDpCRU |
+| **Part 3 / POE video** | https://1drv.ms/v/c/6b4b4f53ee999311/IQBqFH47eLIUSpT7ijBDynWvAYYRYWEhXVgtB7CD0q7fXPc?e=1vPbEB |
 
 ## Project parts
 
@@ -21,6 +21,8 @@ A WPF desktop chatbot that teaches South African users how to stay safe online. 
 | **Part 3 / POE** | **Task assistant (MySQL), quiz, NLP simulation, activity log** | **`v3.0.0`** |
 
 ##Actions
+
+
 <img width="796" height="195" alt="image" src="https://github.com/user-attachments/assets/75b89e5a-fbf1-4d2f-bcd8-511d4713e961" />
 
 
