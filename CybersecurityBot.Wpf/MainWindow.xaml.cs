@@ -1,8 +1,10 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Media;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using CybersecurityBot.Wpf.Models;
 using CybersecurityBot.Wpf.Services;
 
@@ -11,9 +13,12 @@ namespace CybersecurityBot.Wpf;
 public partial class MainWindow : Window
 {
     private readonly User _user = new();
-    private bool _awaitingName = true;
     private readonly TaskService _tasks;
+    private readonly DispatcherTimer _reminderTimer = new() { Interval = TimeSpan.FromSeconds(20) };
+    private readonly HashSet<int> _notified = new();   // reminders already shown this session
+    private bool _awaitingName = true;
     private bool _botBusy;
+    private bool _dbReady;
     private ResponseEngine? _engine;
     private AssistantService? _assistant;
 
@@ -25,8 +30,11 @@ public partial class MainWindow : Window
         InitializeComponent();
         _tasks = new TaskService(Db, Log.Add);
         TasksPage.Initialize(_tasks);
-        LogPage.Initialize(Log);
         QuizPage.Initialize(Log);
+        LogPage.Initialize(Log);
+
+        _reminderTimer.Tick += (_, _) => CheckReminders();
+        _reminderTimer.Start();
         Loaded += async (_, _) => await StartAsync();
     }
 
@@ -40,11 +48,12 @@ public partial class MainWindow : Window
             AddBubble("System", "⚠ " + audioError, "#5A1D1D", HorizontalAlignment.Center);
 
         string? dbError = await Task.Run(() => Db.Initialize());
+        _dbReady = dbError == null;
         AddBubble("System",
             dbError == null ? "✔ Connected to the MySQL database." : "⚠ " + dbError,
             dbError == null ? "#1B4332" : "#5A1D1D",
             HorizontalAlignment.Center);
-        if (dbError == null) TasksPage.Refresh();
+        if (_dbReady) TasksPage.Refresh();
 
         await BotSayAsync("Hello! Welcome to the Cybersecurity Awareness Bot. I'm here to help you stay safe online.", 30);
         await BotSayAsync("Before we start, what's your name?");
@@ -94,12 +103,6 @@ public partial class MainWindow : Window
         await BotSayAsync(GetReply(input));
     }
 
-    private void OpenQuiz()
-    {
-        MainTabs.SelectedItem = QuizTab;
-        QuizPage.StartQuiz();
-    }
-
     private async Task HandleNameAsync(string input)
     {
         // Accepts "Aphiwe" as well as "my name is Aphiwe"
@@ -116,21 +119,59 @@ public partial class MainWindow : Window
         _engine = new ResponseEngine(_user);
         _assistant = new AssistantService(_tasks, Log, OpenQuiz, () => TasksPage.Refresh());
         Log.Add($"Chat started with {name}");
+
         await BotSayAsync($"Great to meet you, {name}! Let's talk about staying safe online.");
-        await BotSayAsync("You can ask me about passwords, phishing, scams, privacy or safe browsing. Type 'exit' to quit.");
+        await BotSayAsync("Ask me about passwords, phishing, scams or privacy. You can also say 'add task - review privacy settings', 'remind me to update my password tomorrow', 'start quiz' or 'show activity log'. Type 'exit' to quit.");
     }
 
+    /// <summary>Commands (tasks, quiz, log) get first chance, then the Part 2 chat engine answers.</summary>
     private string GetReply(string input) => _assistant!.TryHandle(input) ?? _engine!.GetResponse(input);
+
+    private void OpenQuiz()
+    {
+        MainTabs.SelectedItem = QuizTab;
+        QuizPage.StartQuiz();
+    }
+
+    // ---------- Reminder alerts ----------
+    private void CheckReminders()
+    {
+        if (!_dbReady || _awaitingName || _botBusy) return;
+
+        try
+        {
+            var due = _tasks.GetAll()
+                .Where(t => !t.IsCompleted && t.ReminderDate.HasValue && t.ReminderDate <= DateTime.Now && !_notified.Contains(t.Id))
+                .ToList();
+
+            foreach (TaskItem task in due)
+            {
+                _notified.Add(task.Id);
+                Log.Add($"Reminder due: '{task.Title}'");
+                AddBubble("⏰ Reminder", $"{task.Title}\n{task.Description}", "#9A6700", HorizontalAlignment.Left);
+            }
+
+            if (due.Count > 0)
+            {
+                SystemSounds.Exclamation.Play();
+                TasksPage.Refresh();
+            }
+        }
+        catch
+        {
+            // database unavailable: try again on the next tick
+        }
+    }
 
     // ---------- UI helpers ----------
     private async Task BotSayAsync(string text, int delayMs = 12)
     {
-        if (text.Length > 120) delayMs = 3;
+        if (text.Length > 120) delayMs = 3;   // long replies type faster
 
         _botBusy = true;
         TextBlock body = AddBubble("Bot", string.Empty, "#1F6FEB", HorizontalAlignment.Left);
 
-        foreach (char c in text)   // typing effect, same idea as Part 1's TypeLine
+        foreach (char c in text)
         {
             body.Text += c;
             ChatScroll.ScrollToEnd();

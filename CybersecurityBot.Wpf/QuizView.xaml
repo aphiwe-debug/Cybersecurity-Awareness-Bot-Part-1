@@ -1,6 +1,7 @@
-﻿<<UserControl x:Class="CybersecurityBot.Wpf.QuizView"
+﻿<UserControl x:Class="CybersecurityBot.Wpf.QuizView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:CybersecurityBot.Wpf">
     <UserControl.Resources>
         <Style x:Key="OptionButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
             <Setter Property="Background" Value="#21262D"/>
@@ -59,4 +60,4 @@
             </StackPanel>
         </Border>
     </Grid>
-    </UserControl>
+</UserControl>
