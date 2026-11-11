@@ -210,8 +210,8 @@ public static class KnowledgeBase
         }),
         (@"what can i ask|\bhelp\b|topics|what do you know", new[]
         {
-            "You can ask me about passwords, phishing, scams, privacy, malware, safe browsing, social engineering, public Wi-Fi, identity theft, online banking and software updates. Say 'tell me more' to go deeper on any of them.",
-            "I cover 11 topics, from passwords and phishing to banking safety and Wi-Fi. Name one, or ask for 'an example' once we're talking about it."
+            "I can teach you about passwords, phishing, scams, privacy, malware, safe browsing, social engineering, public Wi-Fi, identity theft, online banking and updates. I can also manage your security tasks ('add task - review privacy settings'), set reminders ('remind me to update my password tomorrow'), run a quiz ('start quiz') and show what I've done ('show activity log').",
+            "Ask me about any cybersecurity topic, or try: 'add task ...', 'remind me to ...', 'show my tasks', 'start quiz' or 'what have you done for me?'."
         }),
         (@"your name|who are you", new[]
         {

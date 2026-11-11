@@ -1,197 +1,176 @@
-# Cybersecurity Awareness Bot
+# Cybersecurity Awareness Bot (Part 3 / POE)
 
-A C# console chatbot that educates users on basic cybersecurity practices — passwords, phishing, safe browsing, and malware — through a simple, styled command-line conversation.  
+A WPF desktop chatbot that teaches South African users how to stay safe online. Part 3 adds a MySQL-backed task assistant with reminders, a cybersecurity quiz, NLP-style command recognition and an activity log, all inside the Part 2 chatbot.
 
-# video walkthrough
-
-https://1drv.ms/v/c/6b4b4f53ee999311/IQCwnD-H7RCzTKvrKsIX8U6bAY0j0-r8dKYZ_PqaGligIiE?e=8qzyf3
-
-## videowalkthrough
-https://1drv.ms/v/c/6b4b4f53ee999311/IQDQ74JwU_7BRpRe4YeI5j9zAVtSl4irff_SGPUOU_KfDg4?e=jTYktz
-
-## Features
-
-- **ASCII art banner** — displays a logo when the app starts
-- **Voice greeting** — plays a `.wav` welcome sound after the intro text (Windows only, via `System.Media.SoundPlayer`)
-- **Styled console UI** — colour-coded bot/user messages, dividers, headers, and a typewriter text effect
-- **Personalized conversation** — asks for the user's name and uses it throughout the session
-- **Keyword-based Q&A engine** — recognizes topics like passwords, phishing, safe browsing, and malware, and responds with relevant tips
-- **Input validation** — handles empty/whitespace input and unrecognized questions gracefully
-- **Exit commands** — type `exit`, `quit`, or `bye` at any time to end the session
-
-  ##Actions
-
-  
-  <img width="752" height="162" alt="image" src="https://github.com/user-attachments/assets/d0b64ff5-2ad2-4987-aceb-c74297e5d6d6" />
-
-## Project Structure
-
-Each class lives in its own file (not all crammed into `Program.cs`):
-
-| File | Responsibility |
+| | |
 |---|---|
-| `Program.cs` | Entry point — wires everything together and runs the main conversation loop |
-| `User.cs` | Stores the user's name and a running count of questions asked |
-| `ConsoleUI.cs` | Static helper for colours, dividers, headers, typing effect, and prompts |
-| `AsciiArtService.cs` | Displays the ASCII logo on startup |
-| `AudioService.cs` | Plays the welcome `.wav` file, with graceful fallback if missing/unsupported |
-| `ResponseService.cs` | Core chatbot logic — validates input and maps keywords to responses |
+| **Module** | Programming 2A (PROG6221) |
+| **Student** | Aphiwe Magwaza |
+| **Student number** | `ST10499504` |
+| **Repository** | https://github.com/aphiwe-debug/Cybersecurity-Awareness-Bot-Part-1 |
+| **Part 1 video** | `https://1drv.ms/v/c/6b4b4f53ee999311/IQCwnD-H7RCzTKvrKsIX8U6bAY0j0-r8dKYZ_PqaGligIiE?e=FPktjR` |
+| **Part 2 video** | `part 2 walkthrough.mp4` |
+| **Part 3 / POE video** | `part 3.mp4` |
 
-## Actions success
-<img width="791" height="141" alt="Screenshot 2026-09-08 144038" src="https://github.com/user-attachments/assets/2b3bf077-8eab-430e-8df9-43bd2e8574d0" />
+## Project parts
+
+| Part | What it is | Tag |
+|---|---|---|
+| Part 1 | Console chatbot with voice greeting, ASCII logo and basic responses | `v1.0.0` |
+| Part 2 | WPF GUI, keyword recognition, random tips, memory, sentiment detection | `v2.0.0` |
+| **Part 3 / POE** | **Task assistant (MySQL), quiz, NLP simulation, activity log** | **`v3.0.0`** |
+
+##Actions
+<img width="796" height="195" alt="image" src="https://github.com/user-attachments/assets/75b89e5a-fbf1-4d2f-bcd8-511d4713e961" />
 
 
-
-## Requirements
-
-- **.NET SDK** (6.0 or later recommended)
-- **Windows OS** for the voice greeting feature (`SoundPlayer` is Windows-only; the app still runs on other platforms, just without audio)
-- A `welcome.wav` audio file placed in the application's base directory (next to the executable)
-
-## Setup & Running
-
-1. Clone or download the project files.
-2. Make sure **all six `.cs` files** (`Program.cs`, `User.cs`, `ConsoleUI.cs`, `AsciiArtService.cs`, `AudioService.cs`, `ResponseService.cs`) are in the **same project folder** as your `.csproj` file, and that each shows up in Solution Explorer with Build Action set to **Compile**. If a file isn't part of the project, you'll get `CS0103`/`CS0246` "does not exist in the current context" errors.
-3. Place a `welcome.wav` file in the project's output/base directory (same folder as the compiled `.exe`, or the working directory when run via `dotnet run`).
-4. Build and run:
-   ```bash
-   dotnet build
-   dotnet run
-   ```
-5. Follow the prompts: enter your name, then ask about cybersecurity topics.
-
-## Usage
-
-Once running, you can ask things like:
-
-- `What's a good password?`
-- `How do I spot a phishing email?`
-- `Is this link safe to click?`
-- `What is malware?`
-- `What can I ask you?`
-
-Type `exit`, `quit`, or `bye` to end the conversation.
-
-## Continuous Integration
-
-<!-- Paste your GitHub Actions successful (green check) run screenshot here before submitting -->
-
-## Notes
-
-- The chatbot matches responses using simple keyword detection (`Contains`), not natural language processing — phrasing matters.
-- If a message doesn't match any known topic, the bot asks the user to rephrase.
-- Audio playback failures (missing file, unsupported platform) are caught and logged as warnings without crashing the app.
-- You may see a `CA1416` build warning noting `SoundPlayer` is Windows-only — this is expected since the app targets Windows and can be safely ignored.
-
-## Possible Improvements
-
-- Add more topics (e.g. two-factor authentication, social engineering, ransomware)
-- Track and summarize `QuestionsAsked` at session end
-- Replace keyword matching with a more flexible NLP/intent-matching approach
-- Cross-platform audio support
-
-# Part 2: WPF Chatbot
-
-A WPF desktop chatbot that teaches South African users how to stay safe online. It recognises 11 cybersecurity topics, gives varied answers, remembers the user and responds to how they feel.
+---
 
 ## Requirements
 
-- Windows 10 or 11 (the voice greeting uses `System.Media.SoundPlayer`, which is Windows only)
+- Windows 10 or 11 (the voice greeting uses `System.Media.SoundPlayer`)
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - Visual Studio 2022 with the **.NET desktop development** workload
+- **MySQL Server 8.x** running locally on port 3306 ([MySQL Installer for Windows](https://dev.mysql.com/downloads/installer/), "Server only" is enough)
 
-## Features
+## Setup and run
 
-| Feature | How it works |
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/aphiwe-debug/Cybersecurity-Awareness-Bot-Part-1.git
+   ```
+2. Make sure MySQL Server is running and you know the `root` password.
+3. In the `CybersecurityBot.Wpf` folder, copy `dbsettings.example.json` to a new file named `dbsettings.json` and put your MySQL password in it:
+   ```json
+   {
+     "Server": "localhost",
+     "Port": 3306,
+     "User": "root",
+     "Password": "YOUR_MYSQL_PASSWORD",
+     "Database": "cybersecurity_bot"
+   }
+   ```
+   `dbsettings.json` is excluded from Git so passwords are never committed.
+4. Open `CybersecurityBot.sln` in Visual Studio.
+5. Right-click **CybersecurityBot.Wpf**, choose **Set as Startup Project**, then press **F5**.
+
+The app creates the `cybersecurity_bot` database and the `tasks` table automatically on first run. A green "Connected to the MySQL database" message appears when it works. If MySQL is unreachable, the app shows a clear message and the chat, quiz and log still work.
+
+## Part 3 features
+
+The window has four tabs: **Chat**, **Tasks**, **Quiz** and **Activity Log**. Everything from Parts 1 and 2 (voice greeting, ASCII logo, keyword recognition, random tips, memory, sentiment detection) still works in the Chat tab.
+
+### 1. Task assistant with reminders (MySQL)
+
+- Add a task with a title, a description and an optional reminder: no reminder, in 1, 3 or 7 days, or a chosen date.
+- View all tasks, mark them completed or delete them. Every change is saved to MySQL.
+- Reminders pop up in the chat, with a sound, when they become due.
+- Tasks can also be created from the chat (see the NLP section).
+
+**Database table**
+
+```sql
+CREATE TABLE IF NOT EXISTS tasks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(150) NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    reminder_date DATETIME NULL,
+    is_completed TINYINT(1) NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+All CRUD operations use parameterised queries in `TaskService`.
+
+### 2. Cybersecurity quiz
+
+- 12 questions, a mix of multiple choice and true/false, shown one at a time in random order.
+- Instant feedback after each answer with a short explanation.
+- A final score with a message, for example "Great job! You're a cybersecurity pro!".
+
+### 3. NLP simulation
+
+The bot recognises requests worded in different ways, using regular expressions and string matching.
+
+| Say something like | What happens |
 |---|---|
-| **GUI** | Dark-themed WPF window with the ASCII logo as a header, chat bubbles, an input box and a Send button. Press Enter or click Send. |
-| **Voice greeting and ASCII logo** | `welcome.wav` plays on launch and the Part 1 logo is shown in a monospaced font. |
-| **Typing effect** | The bot's replies appear character by character, like the Part 1 console version. |
-| **Keyword recognition** | 11 topics recognised from many keywords each, for example "phish", "2FA", "SIM swap", "VPN", "POPIA". |
-| **Random responses** | Each topic has several tips. One is picked at random, never the same tip twice in a row, with a randomly chosen intro line. |
-| **Conversation flow** | Follow-ups such as "another tip", "tell me more", "give me an example" and "I'm confused" continue the current topic without restarting. |
-| **Depth ladder** | "tell me more" gives an explanation, asking again gives a real-world example, and a third time suggests a new topic. |
-| **Memory and recall** | Remembers your name and favourite topic, then personalises later tips. Ask "what do you remember" to see it. |
-| **Sentiment detection** | Detects worried, frustrated, overwhelmed and curious. The bot responds with empathy and gives a tip in the same reply. |
-| **Small talk** | Greetings, thanks, jokes, "who made you" and more, with several replies each. |
-| **Error handling** | Empty input shows a warning, unknown input gets a fallback that suggests topics, and a global handler stops unexpected errors from crashing the app. |
+| `Add task - Review privacy settings` | Task saved, bot asks if you want a reminder |
+| `Yes, remind me in 3 days` | Reminder saved on that task |
+| `Remind me to update my password tomorrow` | Task and reminder saved in one step |
+| `Can you remind me to update my password?` | Task saved, bot asks when |
+| `Add a reminder to check my privacy settings next week` | Task and reminder saved |
+| `Add a task to enable two-factor authentication` | Task saved with a suitable description |
+| `Show my tasks` | Pending tasks listed in the chat |
+| `Start quiz` / `quiz me` / `test my knowledge` | Opens and starts the quiz |
+| `What have you done for me?` / `Show activity log` | Last 5 actions listed |
+| `Show more` | Longer history |
 
-### Topics covered
+Dates understood: `tomorrow`, `today`, `next week`, `next month`, `in 3 days`, `in two weeks`, `in an hour`, and weekday names such as `on Friday`.
 
-Passwords, phishing, scams, privacy, malware, safe browsing, social engineering, public Wi-Fi, identity theft, online banking, software updates and backups.
+### 4. Activity log
 
-### Improvements over Part 1
+Records tasks added, completed and deleted, reminders set and due, quiz started and completed, and actions the bot took from NLP interpretation, each with a timestamp. The Activity Log tab shows the latest 5 and has a **Show more** button. In chat, "show activity log" shows the last 5 and "show more" shows more.
 
-| Part 1 | Part 2 |
-|---|---|
-| 4 topics | 11 topics, each with several tips, an explanation and an example |
-| One fixed reply per question | Random tips and intros, several replies for small talk |
-| Each question handled on its own | Follow-ups continue the current topic |
-| Question count stored but unused | Memory of name, favourite topic and question count, used to personalise replies |
-| Console only | WPF GUI with the voice greeting and ASCII logo carried over |
-
-## Try these phrases
-
-| Type this | What to expect |
-|---|---|
-| `hello` | A greeting using your name |
-| `what is phishing` | An explanation of phishing |
-| `tell me more` | A real-world example of the current topic |
-| `give me another tip` | A different random tip on the same topic |
-| `I'm interested in privacy` | The bot remembers privacy as your favourite topic |
-| `give me a privacy tip` | A tip, plus a personal note for your favourite topic |
-| `I'm worried about online scams` | An empathetic reply and a scam tip in the same message |
-| `someone called pretending to be my bank` | Recognised as social engineering |
-| `what do you remember` | Your name, favourite topic and question count |
-| `tell me a joke` | A random joke |
-| `exit` | Goodbye message, then the app closes |
-
-## How the code is organised
+## Project structure
 
 ```
 CybersecurityBot.sln
-├── Cybersecurity_Awareness_Bot_Part_1/   Part 1 console app (unchanged since v1.0.0)
-├── CybersecurityBot.Wpf/                 Part 2 WPF app
-│   ├── App.xaml / App.xaml.cs            Application entry point and global error handler
-│   ├── MainWindow.xaml                   GUI layout: logo, chat area, input row
-│   ├── MainWindow.xaml.cs                Chat flow, name capture, typing effect, validation
-│   ├── welcome.wav                       Voice greeting
-│   ├── Models/
-│   │   └── User.cs                       Name, favourite topic, last topic, question count
+├── Cybersecurity_Awareness_Bot_Part_1/   Part 1 console app (v1.0.0)
+├── CybersecurityBot.Wpf/
+│   ├── App.xaml / App.xaml.cs            Shared styles, global error handler
+│   ├── MainWindow.xaml / .cs             Tabs, chat flow, reminder timer
+│   ├── TasksView.xaml / .cs              Task assistant tab
+│   ├── QuizView.xaml / .cs               Quiz tab
+│   ├── LogView.xaml / .cs                Activity log tab
+│   ├── dbsettings.example.json           Template for the MySQL settings
+│   ├── Models/                           User, TaskItem, QuizQuestion
 │   └── Services/
-│       ├── AsciiArtService.cs            ASCII logo
-│       ├── AudioService.cs               Plays the WAV greeting safely
-│       ├── KnowledgeBase.cs              All dictionaries and lists of bot content
-│       └── ResponseEngine.cs             Decides how the bot replies
-├── docs/                                 Screenshots used in this README
+│       ├── DatabaseSettings.cs           Loads connection settings
+│       ├── DatabaseService.cs            Creates the database and table, opens connections
+│       ├── TaskService.cs                CRUD for tasks
+│       ├── ActivityLog.cs                In-memory log of actions
+│       ├── QuizService.cs                Question bank and score feedback
+│       ├── AssistantService.cs           NLP simulation for commands
+│       ├── ResponseEngine.cs             Part 2 delegate pipeline (keywords, tips, sentiment)
+│       ├── KnowledgeBase.cs              Dictionaries of bot content
+│       ├── AudioService.cs               Voice greeting
+│       └── AsciiArtService.cs            ASCII logo
+├── docs/                                 Screenshots
 └── .github/workflows/                    GitHub Actions CI
 ```
 
 ### Key techniques
 
-- **Delegates.** `ResponseEngine` defines `delegate string? ResponseHandler(string text)` and keeps a `List<ResponseHandler>` as a pipeline: recall, interest, follow-up, topic or sentiment, then small talk. The first handler that returns a reply wins, so new behaviour is added by writing one method and adding it to the list.
-- **Generic collections.** `Dictionary<string, string>` maps keywords to topics, `Dictionary<string, List<string>>` holds the random tips, and `List<(string Pattern, string[] Replies)>` holds small talk.
-- **Separation of concerns.** The window only handles display and input, `ResponseEngine` decides what to say, and `KnowledgeBase` holds the content. Adding a topic means editing data, not logic.
-- **Regular expressions.** Used for small-talk patterns, the "I'm interested in..." memory pattern, and cleaning "my name is..." input.
-- **Async typing effect.** `async`/`await` with `Task.Delay` keeps the window responsive while the bot types.
+- **Layered design:** views handle display, services hold the logic, and `DatabaseService` is the only class that knows connection details.
+- **MySQL with parameterised queries** (`MySql.Data`), so user text can never alter the SQL.
+- **Regular expressions** for command recognition, date phrases and title clean-up in `AssistantService`.
+- **Delegate pipeline** from Part 2 still decides chat replies, after `AssistantService` has had first chance to match a command.
+- **Events and timers:** `ActivityLog` raises a `Changed` event the log tab listens to, and a `DispatcherTimer` checks for due reminders every 20 seconds.
+- **Generic collections:** `List<QuizQuestion>`, `Dictionary` keyword maps, `HashSet<int>` of reminders already shown.
+- **Graceful errors:** database failures show a message instead of crashing, and a global handler catches anything unexpected.
 
 ## Version control and releases
 
-All Part 2 work is committed on the `part2` branch, with the `Part 2:` prefix on every message, and merged into `master`.
+Work was done on feature branches (`part-2`, `part-3`) with `Part 2:` and `Part 3:` commit prefixes, then merged into `master` with merge commits.
 
 | Release | Tag | Contents |
 |---|---|---|
 | Part 1 | `v1.0.0` | Console chatbot |
-| Part 2 | `v2.0.0` | Complete Part 2 with depth ladder, error handling and CI, GUI, keywords, random tips, memory, sentiment |
+| Part 2 | `v2.0.0` | Complete Part 2 |
+| Part 3 | `v3.0.0` | Complete POE with integration and reminders |
 
-```
+History by part:
+
+- Part 1: https://github.com/aphiwe-debug/Cybersecurity-Awareness-Bot-Part-1/commits/v1.0.0
+- Part 2: https://github.com/aphiwe-debug/Cybersecurity-Awareness-Bot-Part-1/compare/v1.0.0...v2.0.0
+- Part 3: https://github.com/aphiwe-debug/Cybersecurity-Awareness-Bot-Part-1/compare/v2.0.0...v3.0.0
 
 ### Continuous integration
 
-GitHub Actions (`.github/workflows`) restores and builds the solution on `windows-latest` for every push and pull request. WPF builds only on Windows. The screenshot at the top of this README shows a passing run.
+GitHub Actions restores and builds the solution on `windows-latest` for every push and pull request. The screenshot at the top shows a passing run. The build does not need MySQL.
 
-## Notes and limitations
+## Limitations
 
-- Keyword recognition uses simple string matching, so unusual phrasing may reach the fallback reply. Part 3 extends this with broader NLP-style matching.
-- Memory lasts for the current session only.
-- The voice greeting is skipped, with a warning in the chat, if `welcome.wav` is missing or the platform doesn't support playback.
+- MySQL must be installed and running to use the task assistant.
+- Command recognition is rule-based (regex and string matching), so very unusual phrasing may fall back to the normal chat reply.
+- The activity log and chat memory last for the current session. Tasks are stored permanently in MySQL.

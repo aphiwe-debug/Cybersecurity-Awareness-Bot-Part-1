@@ -1,0 +1,7 @@
+{
+  "Server": "localhost",
+  "Port": 3306,
+  "User": "root",
+  "Password": "",
+  "Database": "cybersecurity_bot"
+}
