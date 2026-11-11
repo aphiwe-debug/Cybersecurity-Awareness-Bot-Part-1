@@ -20,6 +20,10 @@ A WPF desktop chatbot that teaches South African users how to stay safe online. 
 | Part 2 | WPF GUI, keyword recognition, random tips, memory, sentiment detection | `v2.0.0` |
 | **Part 3 / POE** | **Task assistant (MySQL), quiz, NLP simulation, activity log** | **`v3.0.0`** |
 
+##Actions
+<img width="796" height="195" alt="image" src="https://github.com/user-attachments/assets/75b89e5a-fbf1-4d2f-bcd8-511d4713e961" />
+
+
 ---
 
 ## Requirements
