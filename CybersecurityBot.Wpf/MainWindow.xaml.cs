@@ -25,6 +25,7 @@ public partial class MainWindow : Window
         _tasks = new TaskService(Db, Log.Add);
         TasksPage.Initialize(_tasks);
         LogPage.Initialize(Log);
+        QuizPage.Initialize(Log);
         Loaded += async (_, _) => await StartAsync();
     }
 

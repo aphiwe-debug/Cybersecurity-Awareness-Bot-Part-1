@@ -72,6 +72,9 @@
             <TabItem x:Name="TasksTab" Header="✅ Tasks">
                 <local:TasksView x:Name="TasksPage" Margin="0,10,0,0"/>
             </TabItem>
+            <TabItem x:Name="QuizTab" Header="🧠 Quiz">
+                <local:QuizView x:Name="QuizPage" Margin="0,10,0,0"/>
+            </TabItem>
             <TabItem x:Name="LogTab" Header="📜 Activity Log">
                 <local:LogView x:Name="LogPage" Margin="0,10,0,0"/>
             </TabItem>
