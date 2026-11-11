@@ -15,6 +15,7 @@ public partial class MainWindow : Window
     private readonly TaskService _tasks;
     private bool _botBusy;
     private ResponseEngine? _engine;
+    private AssistantService? _assistant;
 
     public DatabaseService Db { get; } = new(DatabaseSettings.Load());
     public ActivityLog Log { get; } = new();
@@ -93,6 +94,12 @@ public partial class MainWindow : Window
         await BotSayAsync(GetReply(input));
     }
 
+    private void OpenQuiz()
+    {
+        MainTabs.SelectedItem = QuizTab;
+        QuizPage.StartQuiz();
+    }
+
     private async Task HandleNameAsync(string input)
     {
         // Accepts "Aphiwe" as well as "my name is Aphiwe"
@@ -107,16 +114,19 @@ public partial class MainWindow : Window
         _user.Name = name;
         _awaitingName = false;
         _engine = new ResponseEngine(_user);
+        _assistant = new AssistantService(_tasks, Log, OpenQuiz, () => TasksPage.Refresh());
         Log.Add($"Chat started with {name}");
         await BotSayAsync($"Great to meet you, {name}! Let's talk about staying safe online.");
         await BotSayAsync("You can ask me about passwords, phishing, scams, privacy or safe browsing. Type 'exit' to quit.");
     }
 
-    private string GetReply(string input) => _engine!.GetResponse(input);
+    private string GetReply(string input) => _assistant!.TryHandle(input) ?? _engine!.GetResponse(input);
 
     // ---------- UI helpers ----------
     private async Task BotSayAsync(string text, int delayMs = 12)
     {
+        if (text.Length > 120) delayMs = 3;
+
         _botBusy = true;
         TextBlock body = AddBubble("Bot", string.Empty, "#1F6FEB", HorizontalAlignment.Left);
 
