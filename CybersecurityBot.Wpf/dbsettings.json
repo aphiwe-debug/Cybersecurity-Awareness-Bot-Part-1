@@ -1,7 +1,7 @@
 {
   "Server": "localhost",
   "Port": 3306,
-  "User": "root",
-  "Password": "Kamvamagwaza1",
-  "Database": "cybersecurity_bot"
+  "User": "your_db_user",
+  "Password": "replace-with-local-password",
+  "Database": "your_database_name"
 }
